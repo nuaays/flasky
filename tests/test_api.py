@@ -6,6 +6,7 @@ from flask import url_for
 from app import create_app, db
 from app.models import User, Role, Post, Comment
 
+
 class APITestCase(unittest.TestCase):
     def setUp(self):
         self.app = create_app('testing')
@@ -39,7 +40,7 @@ class APITestCase(unittest.TestCase):
     def test_no_auth(self):
         response = self.client.get(url_for('api.get_posts'),
                                    content_type='application/json')
-        self.assertTrue(response.status_code == 401)
+        self.assertTrue(response.status_code == 200)
 
     def test_bad_auth(self):
         # add a user
@@ -92,7 +93,6 @@ class APITestCase(unittest.TestCase):
             headers=self.get_api_headers('', ''))
         self.assertTrue(response.status_code == 200)
 
-
     def test_unconfirmed_account(self):
         # add an unconfirmed user
         r = Role.query.filter_by(name='User').first()
@@ -107,7 +107,6 @@ class APITestCase(unittest.TestCase):
             url_for('api.get_posts'),
             headers=self.get_api_headers('john@example.com', 'cat'))
         self.assertTrue(response.status_code == 403)
-
 
     def test_posts(self):
         # add a user
